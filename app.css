@@ -7,5 +7,10 @@
   *
 */
 .pic{
-  width: fit-content;
+  width: 25px;
+  height: 25px;
+}
+
+#next-question-btn{ 
+display: none;
 }

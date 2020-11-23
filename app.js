@@ -54,16 +54,16 @@ const STORE = {
   questionNumber: 0,
   score: 0
 };
-
+console.log(STORE.questionNumber)
 //Run the start page, Title and start button Html script
 //set up counters for questions progress and #correct
 function startPage() {
   console.log("starting..");
   return `
   <div class="container">
-        <h1>Try some colors you might have never heard of!</h1>
-        <button type="button" id="start"> Let's Go </button>
-    </div>
+    <h1>Try some colors you might have never heard of!</h1>
+    <button type="button" id="start"> Let's Go </button>
+  </div>
   `;
   
 }
@@ -115,49 +115,42 @@ function generateQuestionHtml() {
       </fieldset>
     </form >
   `;
+
 }
 
 //how to see if the answer is right
 function generateFeedbackHTML(answerStatus) {
   let correctAnswer = STORE.questionsList[STORE.questionNumber].correctAnswer;
   let html = '';
+  console.log(STORE.questionNumber+1)
   if (answerStatus === 'correct') {
     html = `
-    <div class="right-answer">That is correct!</div>
-   
-    <img src="${questionNumber}.webp" class="pic" alt="">
-
+    <div class="right-answer">That is correct! The color looks like this:</div>
+  
+    <img src="colors/${STORE.questionNumber+1}.webp" class="pic" alt="">
     `;
-        //add picture
+        /*/add picture    <div class="question">
+          <legend> ${(STORE.questionNumber.question).slice(0,-11)}</legend>
+        </div>   */
+
 
   }
   else if (answerStatus === 'incorrect') {
     html = `
-      <div class="wrong-answer">That is incorrect. The correct answer is ${correctAnswer}.</div>
-    <img src="${questionNumber}.webp" class="pic" alt="">
+      <div class="wrong-answer">That is incorrect. The correct answer is ${correctAnswer}. The color looks like this:</div>
+      <img src="colors/${STORE.questionNumber+1}.webp" class="pic" alt="">
 
     `;
-    //add picture
+    //add picture    <img src="${questionNumber}.webp" class="pic" alt="">
+
   }
+  //html += displayColor
   return html;
 }
-
-
-//HTML page Question X
-/* 
-1. Question counter
-2. Question 
-3. radio buttons
-  a. If radio button selected .on('click) has the value that matches the correct answer: 
-    1. open box that says correct!
-    2. open picture of color
-    3. update score
-    4. show button for next question
-  b. else 
-    1. open box that says incorrect! Correct answer is: 
-    2. open color
-    3. update score
-    4. show button for next question
+/*
+function displayColor (){
+  return '<div> The color looks like this: <br><img src="colors/${STORE.questionNumber+1}.webp" class="pic" alt="">'
+}
 */
 
 //Final page: Final score, show all 5 colors, retake the quiz
@@ -189,7 +182,7 @@ function generateResultsScreen() {
 
 function render(){
   console.log("rendering")
-  console.log(STORE.quizStarted)
+  //console.log(STORE.quizStarted)
 
   let code = '';
   if (STORE.quizStarted === false){
@@ -199,11 +192,11 @@ function render(){
   else if (STORE.questionNumber>= 0 && STORE.questionNumber<STORE.questionsList.length){
     code = countScore();
     code +=generateQuestionHtml();
-    console.log(code)
-    $('.main').html(code);
+    //console.log(code)
+    $('main').html(code);
   }
   else {
-    $('.main').html(generateResultsScreen());
+    $('main').html(generateResultsScreen());
   }
 }
 
@@ -273,8 +266,19 @@ function handleQuestionFormSubmission(){
   });
 
 }
+
+
+
+function handleRestartButtonClick() {
+  $('body').on('click', '#restart', () => {
+    restartQuiz();
+    render();
+  });
+}
+
+
 function restartQuiz(){
-  quizStarted = false;
+  STORE.quizStarted = false;
   STORE.questionNumber = 0;
   STORE.score = 0;
 }
@@ -282,7 +286,7 @@ function handleRestartButtonClick(){
 
   console.log("restarting..")
   //listen for click
-  $('.body').on('click', '#restart', () =>{
+  $('body').on('click', '#restart', () => {
   restartQuiz();
   //go to start page
   render();
@@ -300,3 +304,20 @@ function handleQuizApp() {
 }
 
 $(handleQuizApp);
+
+//HTML page Question X
+/* 
+1. Question counter
+2. Question 
+3. radio buttons
+  a. If radio button selected .on('click) has the value that matches the correct answer: 
+    1. open box that says correct!
+    2. open picture of color
+    3. update score
+    4. show button for next question
+  b. else 
+    1. open box that says incorrect! Correct answer is: 
+    2. open color
+    3. update score
+    4. show button for next question
+*/
